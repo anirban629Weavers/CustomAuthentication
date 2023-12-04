@@ -125,5 +125,5 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = "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"
+SENDGRID_API_KEY = ""
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
