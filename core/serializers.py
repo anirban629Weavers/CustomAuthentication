@@ -33,6 +33,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email=serializers.EmailField()
     password=serializers.CharField()
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email=serializers.EmailField()
+    
+    def validate(self, attrs):
+        email=attrs["email"]
+        try:
+            user=get_user_model().objects.get(email=email)
+            return user
+        except Exception as e:
+            raise serializers.ValidationError({"email":"Email is not registered"})
+        
+        
     
         
 class MyTokenObtainPairSerializer(jwt_serializers.TokenObtainPairSerializer):

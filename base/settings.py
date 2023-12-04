@@ -111,10 +111,12 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.ScopedRateThrottle',
     ],
-    'DEFAULT_THROTTLE_RATES': {
-        'login': '3/minute',
-        'signup': '3/minute'
+   'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/day',
+        'user': '5/day',
+        'custom': '5/day'
     }
+
 }
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

@@ -1,14 +1,15 @@
 from django.contrib.auth import authenticate
-from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
-from core.models import CustomUser
-from core.serializers import UserSerializer
-from rest_framework.permissions import AllowAny,IsAuthenticated
-from rest_framework_simplejwt import tokens,serializers
-from rest_framework import exceptions as rest_exceptions,response
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt import tokens
+from rest_framework import exceptions as rest_exceptions,response,generics
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
-from django.http import HttpResponse
+from core.serializers import LoginSerializer,RegistrationSerializer,ForgotPasswordSerializer
+from rest_framework.throttling import ScopedRateThrottle
+from rest_framework_simplejwt.views import TokenObtainPairView
 from django.views.decorators.csrf import csrf_exempt
-from core.serializers import LoginSerializer,RegistrationSerializer
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model 
+from rest_framework import  status
 
 def get_user_tokens(user):
     refresh = tokens.RefreshToken.for_user(user)
@@ -17,6 +18,16 @@ def get_user_tokens(user):
         "access_token": str(refresh.access_token)
     }
 
+class LoginAPI(TokenObtainPairView):
+    throttle_classes = [ScopedRateThrottle]
+    permission_classes=[AllowAny]
+    throttle_scope = 'custom'
+
+class RegisterAPI(generics.CreateAPIView):
+    permission_classes=[AllowAny]
+    serializer_class=RegistrationSerializer
+    
+                
 @api_view(["POST"])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -34,7 +45,6 @@ def loginView(request):
     except Exception as e:
         raise rest_exceptions.AuthenticationFailed("Invalid Credentials")
 
-@api_view(["POST"])
 @permission_classes([AllowAny])
 def createUser(request):
     serailizer=RegistrationSerializer(data=request.data)
@@ -47,4 +57,10 @@ def createUser(request):
     else: raise rest_exceptions.ParseError("Invalid Token")    
 
 
-
+@csrf_exempt
+@api_view(["POST"])
+def forgetPassword(request):
+    serializer=ForgotPasswordSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        msgLink=f'/forget-'
+        return response.Response({"msg-link":msgLink},status=status.HTTP_200_OK)
