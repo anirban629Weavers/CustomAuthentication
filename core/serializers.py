@@ -45,7 +45,8 @@ class ForgotPasswordSerializer(serializers.Serializer):
         except Exception as e:
             raise serializers.ValidationError({"email":"Email is not registered"})
         
-        
+class ForgotPasswordDataSerializer(serializers.Serializer):
+    password=serializers.CharField()
     
         
 class MyTokenObtainPairSerializer(jwt_serializers.TokenObtainPairSerializer):

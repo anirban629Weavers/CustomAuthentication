@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,include
-from authentication.views import createUser,loginView,LoginAPI,RegisterAPI,forgetPassword
+from authentication.views import createUser, forgetPasswordToken,loginView,LoginAPI,RegisterAPI,forgetPassword
 
 
 urlpatterns = [
@@ -11,4 +11,5 @@ urlpatterns = [
     
 
     path('forget-password/', forgetPassword, name="forget-password"),
+    path('forget-password/token/<str:id>', forgetPasswordToken, name="forget-password-token"),
 ]

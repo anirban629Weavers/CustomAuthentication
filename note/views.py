@@ -5,8 +5,8 @@ from rest_framework.permissions import AllowAny,IsAuthenticated,IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication 
 
 class NoteCreateList(ListCreateAPIView):
-    authentication_classes=[JWTAuthentication]
-    permission_classes=[IsAdminUser]
+    # authentication_classes=[JWTAuthentication]
+    permission_classes=[AllowAny]
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
 

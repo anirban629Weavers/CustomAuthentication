@@ -34,3 +34,7 @@ class Note(models.Model):
 
     def __str__(self):
         return self.title
+
+class PasswordToken(models.Model):
+    user=models.ForeignKey(CustomUser,related_name="Password_token",on_delete=models.CASCADE,null=True)
+    token=models.CharField(max_length=15,default="0")
